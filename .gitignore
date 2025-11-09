@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data files (keep structure but not large datasets)
+# Uncomment the next line if you don't want to commit the dataset
+# data/*.csv
+
+# Model files
+*.pkl
+*.h5
+*.joblib
+
+# Logs
+*.log
