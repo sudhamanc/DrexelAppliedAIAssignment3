@@ -35,6 +35,13 @@ End-to-end fraud detection pipelines for binary (fraud vs. legitimate) and multi
    - Repo includes `data/creditcardFraudTransactions.csv.zip`; `rundemo.py` extracts it on first run.
    - If the archive is missing, add `creditcardFraudTransactions.csv` (or re-create the ZIP) in `data/` before running.
 
+**Alternative: Run in Browser (MyBinder)**
+You can also run this project directly in your browser without any local setup using MyBinder:
+
+- [🚀 Launch Interactive Demo on MyBinder](https://mybinder.org/v2/gh/sudhamanc/DrexelAppliedAIAssignment3/main?urlpath=lab&cachebust=123)
+
+This opens a JupyterLab environment with all dependencies pre-installed. Create a new notebook and run `!python rundemo.py` in a cell to execute the full demo.
+
 **macOS note**: If XGBoost complains about missing OpenMP, run `brew install libomp`.
 
 ---
