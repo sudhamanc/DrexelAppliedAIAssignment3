@@ -21,10 +21,20 @@ Author: Sudhaman Chittlanka
 Course: Applied AI - Fall 2025
 """
 
+import os
+import shutil
 import subprocess
 import sys
 import time
+import zipfile
 from datetime import datetime
+from pathlib import Path
+
+
+DATA_DIR = Path("data")
+DATA_FILE = DATA_DIR / "creditcardFraudTransactions.csv"
+KAGGLE_DATASET = "mlg-ulb/creditcardfraud"
+KAGGLE_FILENAME = "creditcard.csv"
 
 
 def print_header(title):
@@ -87,8 +97,69 @@ def run_script(script_name, description, estimated_time):
         return False, elapsed_time
 
 
+def ensure_dataset():
+    """Ensure the fraud dataset is available locally."""
+    if DATA_FILE.exists():
+        print(f"✓ Dataset already present at {DATA_FILE}")
+        return True
+
+    print_header("DATASET SETUP")
+    print("Dataset not found. Attempting automated download via Kaggle API...")
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    kaggle_cli = shutil.which("kaggle")
+    if kaggle_cli is None:
+        print("✗ Kaggle CLI not detected. Install with `pip install kaggle` and configure your API token.")
+        return False
+
+    try:
+        subprocess.run(
+            [
+                kaggle_cli,
+                "datasets",
+                "download",
+                KAGGLE_DATASET,
+                "--file",
+                KAGGLE_FILENAME,
+                "--path",
+                str(DATA_DIR),
+                "--force",
+            ],
+            check=True,
+        )
+    except subprocess.CalledProcessError as exc:
+        print("✗ Kaggle download failed (exit code", exc.returncode, ")")
+        print("Ensure your Kaggle credentials are configured. See README for manual instructions.")
+        return False
+
+    downloaded_path = DATA_DIR / KAGGLE_FILENAME
+
+    # Kaggle downloads arrive as a zip file (sometimes without extension)
+    if downloaded_path.exists() and zipfile.is_zipfile(downloaded_path):
+        with zipfile.ZipFile(downloaded_path) as zf:
+            zf.extractall(DATA_DIR)
+        downloaded_path.unlink(missing_ok=True)
+
+    extracted_csv = DATA_DIR / KAGGLE_FILENAME
+    if extracted_csv.exists() and extracted_csv.suffix.lower() == ".csv":
+        extracted_csv.rename(DATA_FILE)
+
+    if DATA_FILE.exists():
+        print(f"✓ Dataset downloaded to {DATA_FILE}")
+        return True
+
+    print("✗ Dataset download did not produce the expected file.")
+    print("Please download `creditcard.csv` from Kaggle manually and rename it to"
+          " `creditcardFraudTransactions.csv` inside the `data/` folder.")
+    return False
+
+
 def main():
     """Main execution function"""
+    if not ensure_dataset():
+        print("\nDemo cannot continue without the dataset.")
+        return 1
+
     print_header("FRAUD DETECTION DEMO - FULL PIPELINE")
     print("This script will run both fraud detection models:")
     print("  1. Binary Classification (XGBoost) - Advanced 7-strategy optimization")
