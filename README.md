@@ -188,6 +188,8 @@ python fraud_multiclass_mlp.py       # ~5-8 minutes
 
 ![Binary confusion matrix showing strong separation at threshold 0.45](fraud_results/fraud_binary_confusion_matrix.png)
 
+![Binary accuracy comparison between default and optimized thresholds](fraud_results/fraud_binary_accuracy.png)
+
 ![Binary metrics comparison spotlighting precision/recall trade-offs](fraud_results/fraud_binary_metrics.png)
 
 ![Binary ROC curve highlighting classifier discrimination](fraud_results/fraud_binary_roc_curve.png)
