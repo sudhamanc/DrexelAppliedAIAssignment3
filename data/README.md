@@ -1,26 +1,24 @@
 # Dataset Directory
 
-This directory ships with a compressed copy of the Credit Card Fraud Detection dataset.
+This directory ships with the dataset required by the fraud detection demos.
 
-## Download Instructions
+## Included Files
 
-The archive `creditcardFraudTransactions.csv.zip` is included in the repository (~66 MB). When you run `rundemo.py`, it automatically extracts `creditcardFraudTransactions.csv` beside the archive if the CSV is not already present.
+- `creditcardFraudTransactions.csv.zip` (~66 MB) — compressed dataset bundled with the repo
+- `creditcardFraudTransactions.csv` (~143 MB) — extracted CSV (created automatically when the demo runs)
 
-If you prefer to download it manually from Kaggle instead:
-1. Visit: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-2. Download `creditcard.csv`
-3. Rename it to `creditcardFraudTransactions.csv`
-4. Place it in this `data/` directory (you can remove the bundled ZIP if you like)
+## Usage
+
+- `rundemo.py` and the individual training scripts will extract the ZIP if the CSV is missing.
+- If you clean the folder to save space, restore either the ZIP or the CSV before executing the models.
 
 ## Dataset Information
 
-- **Original File**: creditcard.csv
-- **Renamed to**: creditcardFraudTransactions.csv
-- **Size**: ~143 MB
+- **Size**: ~143 MB (CSV)
 - **Rows**: 284,807 transactions
-- **Columns**: 31 features (Time, V1-V28, Amount, Class)
+- **Columns**: 31 features (Time, V1–V28, Amount, Class)
 
-After extraction, your directory structure should look like:
+Expected layout after extraction:
 ```
 data/
 ├── README.md (this file)

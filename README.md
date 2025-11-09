@@ -16,7 +16,6 @@ End-to-end fraud detection pipelines for binary (fraud vs. legitimate) and multi
 ### Prerequisites
 - Python 3.13+
 - ~500 MB free disk space
-- Kaggle account (to download the dataset)
 
 ### Setup Steps
 1. **Clone & enter the project**
@@ -36,7 +35,7 @@ End-to-end fraud detection pipelines for binary (fraud vs. legitimate) and multi
    ```
 4. **Dataset setup**
    - Repo includes `data/creditcardFraudTransactions.csv.zip`; `rundemo.py` extracts it on first run.
-   - If you prefer a fresh copy, configure the Kaggle CLI and place `creditcard.csv` (or the extracted CSV) in `data/`.
+   - If the archive is missing, add `creditcardFraudTransactions.csv` (or re-create the ZIP) in `data/` before running.
 
 **macOS note**: If XGBoost complains about missing OpenMP, run `brew install libomp`.
 
@@ -49,7 +48,6 @@ End-to-end fraud detection pipelines for binary (fraud vs. legitimate) and multi
 python rundemo.py
 ```
 - Ordered execution: binary → multiclass
-- Uses bundled dataset archive when available, otherwise falls back to Kaggle download
 - Displays timestamps, elapsed time, and a completion summary
 - Produces all visuals under `fraud_results/`
 
@@ -66,7 +64,7 @@ python fraud_multiclass_mlp.py       # ~5-8 minutes
 | Attribute | Details |
 |-----------|---------|
 | **Name** | Credit Card Fraud Detection Dataset |
-| **Source** | [Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) |
+| **Source** | ULB credit card fraud dataset (2013 release) |
 | **Rows** | 284,807 (283,726 after removing 1,081 duplicates) |
 | **Columns** | 31 (Time, V1-V28, Amount, Class) |
 | **File size** | ~143 MB (CSV uncompressed) |
@@ -206,7 +204,7 @@ Assignment3/
 ├── fraud_binary_xgboost.py
 ├── fraud_multiclass_mlp.py
 ├── data/
-│   ├── README.md                  # Kaggle download steps
+│   ├── README.md                  # Dataset notes
 │   └── creditcardFraudTransactions.csv  # (ignored by git)
 ├── fraud_results/
 │   ├── fraud_binary_confusion_matrix.png
