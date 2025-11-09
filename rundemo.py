@@ -33,6 +33,7 @@ from pathlib import Path
 
 DATA_DIR = Path("data")
 DATA_FILE = DATA_DIR / "creditcardFraudTransactions.csv"
+DATA_ARCHIVE = DATA_DIR / "creditcardFraudTransactions.csv.zip"
 KAGGLE_DATASET = "mlg-ulb/creditcardfraud"
 KAGGLE_FILENAME = "creditcard.csv"
 
@@ -97,15 +98,49 @@ def run_script(script_name, description, estimated_time):
         return False, elapsed_time
 
 
+def extract_packaged_dataset():
+    """Extract the bundled dataset archive if available."""
+    if not DATA_ARCHIVE.exists():
+        return False
+
+    print_header("DATASET SETUP")
+    print("Found packaged dataset archive. Extracting now...")
+
+    try:
+        with zipfile.ZipFile(DATA_ARCHIVE) as archive:
+            archive.extractall(DATA_DIR)
+    except zipfile.BadZipFile:
+        print("✗ Packaged archive appears to be corrupted. Delete it and rerun the demo.")
+        return False
+    except OSError as exc:
+        print(f"✗ Unable to extract archive: {exc}")
+        return False
+
+    candidate = DATA_DIR / KAGGLE_FILENAME
+    if candidate.exists() and candidate != DATA_FILE:
+        candidate.rename(DATA_FILE)
+
+    if DATA_FILE.exists():
+        print(f"✓ Dataset extracted to {DATA_FILE}")
+        return True
+
+    print("✗ Archive extraction completed but dataset file is still missing.")
+    return False
+
+
 def ensure_dataset():
     """Ensure the fraud dataset is available locally."""
     if DATA_FILE.exists():
         print(f"✓ Dataset already present at {DATA_FILE}")
         return True
 
-    print_header("DATASET SETUP")
-    print("Dataset not found. Attempting automated download via Kaggle API...")
     DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    if extract_packaged_dataset():
+        return True
+
+    print_header("DATASET SETUP")
+    print("Packaged dataset not available. Attempting automated download via Kaggle API...")
 
     kaggle_cli = shutil.which("kaggle")
     if kaggle_cli is None:
@@ -149,8 +184,10 @@ def ensure_dataset():
         return True
 
     print("✗ Dataset download did not produce the expected file.")
-    print("Please download `creditcard.csv` from Kaggle manually and rename it to"
-          " `creditcardFraudTransactions.csv` inside the `data/` folder.")
+    print(
+        "Please download `creditcard.csv` from Kaggle manually and rename it to"
+        " `creditcardFraudTransactions.csv` inside the `data/` folder."
+    )
     return False
 
 
