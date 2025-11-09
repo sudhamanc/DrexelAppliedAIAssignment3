@@ -27,9 +27,9 @@ Thumbs.db
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# Data files (keep structure but not large datasets)
-# Uncomment the next line if you don't want to commit the dataset
-# data/*.csv
+# Data files (dataset too large for GitHub - 143 MB)
+# Download from: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+data/*.csv
 
 # Model files
 *.pkl
