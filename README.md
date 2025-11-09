@@ -3,11 +3,9 @@
 End-to-end fraud detection pipelines for binary (fraud vs. legitimate) and multiclass (risk-tiered) prediction on the well-known credit card fraud dataset. The project focuses on reaching strong precision/recall trade-offs despite the extreme 598:1 class imbalance.
 
 ## Highlights
-- **Binary XGBoost**: 99.95% accuracy, 86.36% precision, 80.00% recall (optimized threshold = 0.45)
-- **Multiclass MLP**: 99.30% accuracy, high per-class fidelity with recall ≥ 69% on minority fraud classes
-- **Advanced optimization**: Aggressive SMOTE, F2-score tuning, mutual information feature selection, robust scaling, and threshold sweeping
-- **Visualization suite**: 6 figures comparing metrics, confusion matrices, and ROC curves
-- **Single-command demo**: `rundemo.py` executes both pipelines sequentially
+- **Binary XGBoost**: 99.95% accuracy, 86.36% precision, 80.00% recall at threshold 0.45
+- **Multiclass MLP**: 99.30% accuracy with small-fraud F1 71.30% and large-fraud F1 75.95%
+- **Alert quality**: 12 false positives across 56k legitimate transactions while retaining 83% recall on large-dollar frauds
 
 ---
 
@@ -184,13 +182,23 @@ python fraud_multiclass_mlp.py       # ~5-8 minutes
 
 ---
 
-## Visualizations (`fraud_results/`)
-- `fraud_binary_confusion_matrix.png`
-- `fraud_binary_metrics.png`
-- `fraud_binary_roc_curve.png`
-- `multiclass_confusion_matrix.png`
-- `multiclass_metrics.png`
-- `multiclass_per_class.png`
+## Results Visualizations
+
+**Binary fraud detection**
+
+![Binary confusion matrix showing strong separation at threshold 0.45](fraud_results/fraud_binary_confusion_matrix.png)
+
+![Binary metrics comparison spotlighting precision/recall trade-offs](fraud_results/fraud_binary_metrics.png)
+
+![Binary ROC curve highlighting classifier discrimination](fraud_results/fraud_binary_roc_curve.png)
+
+**Multiclass risk segmentation**
+
+![Multiclass confusion matrix across four risk tiers](fraud_results/multiclass_confusion_matrix.png)
+
+![Multiclass metrics summary with weighted scores](fraud_results/multiclass_metrics.png)
+
+![Per-class F1 scores for multiclass model](fraud_results/multiclass_per_class.png)
 
 ---
 
@@ -219,22 +227,22 @@ Assignment3/
 ---
 
 ## Key Findings
-- Binary model delivers industry-level precision (86%) while recovering 80% of fraud cases
-- Only 12 false alarms across 56k legitimate transactions → excellent customer experience
-- 83% recall on large-dollar frauds ensures high-value protection
-- Multiclass model offers nuanced risk segmentation with >99% accuracy on legitimate tiers
-- Threshold tuning + F2 optimization outperform naive 0.5 cutoff without sacrificing accuracy
+- Binary model maintains 86% precision and 80% recall after threshold tuning at 0.45
+- False positives stay at 12 across 56k legitimate transactions, limiting follow-up workload
+- Large-dollar fraud recall reaches 83%, keeping major losses within the capture set
+- Multiclass model holds >99% accuracy on legitimate tiers while separating small vs. large fraud
+- Threshold tuning with an F2 objective improved recall compared with the default 0.5 cut-off without reducing accuracy
 
 ---
 
 ## Advanced Optimization Strategies
-1. **Aggressive SMOTE**: oversample fraud to 120% of legitimate volume
-2. **F2-score objective**: recall-weighted scoring for RandomizedSearchCV
-3. **Mutual information selection**: top 25 features for XGBoost
-4. **RobustScaler**: mitigates heavy-tailed feature distributions
-5. **Extensive search**: 30 iterations × 5 folds (150 fits) for XGBoost
-6. **Threshold sweeping**: 18 candidate thresholds to balance precision/recall
-7. **Early-stopped MLP**: stable convergence with adaptive learning rate
+1. **Aggressive SMOTE** – oversamples fraud cases to 120% of the majority class so recall is not capped by data scarcity
+2. **F2-score objective** – weights recall higher than precision during RandomizedSearchCV to surface fraud-catching configurations
+3. **Mutual information selection** – keeps the 25 most informative features for XGBoost to reduce noise before boosting
+4. **RobustScaler** – scales features using medians/IQR to blunt the impact of outliers in transaction amounts
+5. **Extensive search** – runs 30 randomized iterations × 5 folds (150 fits) to explore the XGBoost hyperparameter space thoroughly
+6. **Threshold sweeping** – evaluates 18 probability cut-offs to choose the fraud alert threshold that balances precision and recall
+7. **Early-stopped MLP** – applies adaptive learning rate with early stopping to stabilize multiclass training without overfitting
 
 ---
 
