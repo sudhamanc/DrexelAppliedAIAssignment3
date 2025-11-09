@@ -17,7 +17,7 @@ Total estimated runtime: 30-40 minutes
 - Binary classification: ~25-30 minutes
 - Multiclass classification: ~5-8 minutes
 
-Author: Sudhaman Chittlanka
+Author: Sudhaman Chandrasekaran
 Course: Applied AI - Fall 2025
 """
 
@@ -148,14 +148,7 @@ def main():
     print("  1. Binary Classification (XGBoost) - Advanced 7-strategy optimization")
     print("  2. Multiclass Classification (MLP) - 4-class risk level detection")
     print("\nTotal estimated time: 30-40 minutes")
-    print("\nPress Ctrl+C at any time to stop.")
-    
-    # Confirm execution
-    try:
-        input("\nPress Enter to start, or Ctrl+C to cancel...")
-    except KeyboardInterrupt:
-        print("\n\nDemo cancelled by user.")
-        sys.exit(0)
+    print("\nPress Ctrl+C at any time to stop. Starting immediately...\n")
     
     overall_start = time.time()
     results = []
@@ -191,17 +184,10 @@ def main():
             'time': elapsed
         })
         
-        # If a script fails, ask user if they want to continue
+        # If a script fails, stop the remaining runs (no interactive prompt)
         if not success:
-            print("\n⚠ A script has failed. Continue with remaining scripts?")
-            try:
-                response = input("Enter 'y' to continue, or any other key to stop: ")
-                if response.lower() != 'y':
-                    print("\nDemo stopped by user after failure.")
-                    break
-            except KeyboardInterrupt:
-                print("\n\nDemo cancelled by user.")
-                break
+            print("\n⚠ Aborting remaining scripts because of the failure above.")
+            break
     
     # Print summary
     total_time = time.time() - overall_start
